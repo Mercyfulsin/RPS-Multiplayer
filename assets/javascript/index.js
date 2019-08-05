@@ -54,8 +54,14 @@ function rejectGame() {
 function startGame() {
     document.body.innerHTML = "";
     document.write("Welcome");
+    var start = $("<div class='container'><div class='row'></div><div class='row'></div><div class='row'></div></div>");
+    $("body").append(start);
 }
 
 function generateChoices() {
+    
+}
+
+function generateGamePanel(){
 
 }
