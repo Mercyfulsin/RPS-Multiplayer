@@ -13,6 +13,7 @@ var database = firebase.database();
 var connectionsRef = database.ref("/connections");
 var connectedRef = database.ref(".info/connected");
 var playerNumber = "";
+var labels = ["Your Choice:","Result:","Opponent's Choice:"]
 
 // When the client's connection state changes...
 connectedRef.on("value", function (snap) {
@@ -53,15 +54,24 @@ function rejectGame() {
 
 function startGame() {
     document.body.innerHTML = "";
-    document.write("Welcome");
-    var start = $("<div class='container'><div class='row'></div><div class='row'></div><div class='row'></div></div>");
+    // document.write("Welcome");
+    var start = $("<div class='container'><div id='info' class='row mt-3'></div><div id='board' class='row align-items-center justify-content-center'></div><div id='choices' class='row'></div></div>");
     $("body").append(start);
+    generateGamePanel();
 }
 
 function generateChoices() {
-    
+
 }
 
-function generateGamePanel(){
-
+function generateGamePanel() {
+    for (var i = 0; i < 3; i++) {
+        var contain = $("<div class='col-sm-3'>");
+        var square = $("<div>");
+        var text = $("<h4 style='margin:5px'>");
+        text.text(labels[i]);
+        square.attr("id","box");
+        contain.append(text,square);
+        $("#board").append(contain);
+    }
 }
