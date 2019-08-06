@@ -14,7 +14,7 @@ var connectionsRef = database.ref("/connections");
 var connectedRef = database.ref(".info/connected");
 var playerNumber = "";
 var labels = ["Your Choice:", "Result:", "Opponent's Choice:"]
-
+var queue = "";
 // When the client's connection state changes...
 connectedRef.on("value", function (snap) {
     // If they are connected..
@@ -28,9 +28,9 @@ connectedRef.on("value", function (snap) {
 
 // When first loaded
 connectionsRef.on("value", function (snap) {
+    tempNum = snap.numChildren();
     // The number of online users is the number of children in the connections list.
-    if (playerNumber > 2 || playerNumber === "") {
-        tempNum = snap.numChildren();
+    if ((playerNumber === "" || playerNumber > 2) && (tempNum < queue || queue === "")) {
         console.log("I'm player ", tempNum);
         switch (tempNum) {
             case 1:
@@ -39,7 +39,17 @@ connectionsRef.on("value", function (snap) {
                 startGame();
                 break;
             default:
-                rejectGame();
+                queue = tempNum;
+                rejectGame(tempNum);
+        }
+    } else {
+        switch (queue) {
+            case 1:
+                playerNumber = 2;
+                startGame();
+                break;
+            default:
+                queue--;
         }
     }
 });
@@ -47,9 +57,9 @@ connectionsRef.on("value", function (snap) {
 $(document).ready({
 });
 
-function rejectGame() {
+function rejectGame(queue) {
     document.body.innerHTML = "";
-    document.write("<h1>Unfortunately the lobby already has two people playing the game.</h1>");
+    $("body").append(`<h1>Unfortunately the lobby already has two people playing the game.<br>You are in queue: ${queue - 2}</h1>`);
 }
 
 function startGame() {
@@ -65,19 +75,19 @@ function generateChoices() {
     var group = $(`<div class="input-group">`);
     var checkBox = $(`<div class="input-group-prepend"><div class="input-group-text"><input type="radio"></div></div>`);
     var choice = $(`<label class="input-group-text">Rock</label>`);
-    group.append(checkBox,choice);
+    group.append(checkBox, choice);
     $("#choices").append(group);
 }
 
 function generateGamePanel() {
     var squareRow = $("<div class='row align-items-center justify-content-center' style='display: inline-block;'>");
     var squareContainer = $("<div class='col-sm-12'>");
-    
+
     for (var i = 0; i < 3; i++) {
         var textRow = $("<div class='borderRow'>");
         var square = $("<div class='choice'>");
         square.attr("id", "box");
-        textRow.append(`<h4>${labels[i]}</h4>`,square);
+        textRow.append(`<h4>${labels[i]}</h4>`, square);
         squareContainer.append(textRow);
     }
     squareRow.append(squareContainer);
