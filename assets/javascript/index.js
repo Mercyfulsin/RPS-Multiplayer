@@ -65,13 +65,17 @@ function generateChoices() {
 }
 
 function generateGamePanel() {
+    var squareRow = $("<div class='row align-items-center justify-content-center'>");
+    var squareContainer = $("<div class='col-sm-12'>");
+    var textRow = $("<div class='row borderRow'>");
     for (var i = 0; i < 3; i++) {
-        var contain = $("<div class='col-sm-3'>");
-        var square = $("<div>");
-        var text = $("<h4 style='margin:5px'>");
+        var square = $("<div class='choice'>");
+        var text = $(`<h4 class='col-sm-4' style="width: 325px">`);
         text.text(labels[i]);
         square.attr("id","box");
-        contain.append(text,square);
-        $("#board").append(contain);
+        squareContainer.append(square);
+        textRow.append(text);
     }
+    squareRow.append(squareContainer);
+    $("#board").append(textRow,squareRow);
 }
