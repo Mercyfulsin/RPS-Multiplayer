@@ -13,7 +13,7 @@ var database = firebase.database();
 var connectionsRef = database.ref("/connections");
 var connectedRef = database.ref(".info/connected");
 var playerNumber = "";
-var labels = ["Your Choice:","Result:","Opponent's Choice:"]
+var labels = ["Your Choice:", "Result:", "Opponent's Choice:"]
 
 // When the client's connection state changes...
 connectedRef.on("value", function (snap) {
@@ -58,24 +58,28 @@ function startGame() {
     var start = $("<div class='container'><div id='info' class='row mt-3'></div><div id='board' class='row align-items-center justify-content-center'></div><div id='choices' class='row'></div></div>");
     $("body").append(start);
     generateGamePanel();
+    generateChoices();
 }
 
 function generateChoices() {
-
+    var group = $(`<div class="input-group">`);
+    var checkBox = $(`<div class="input-group-prepend"><div class="input-group-text"><input type="radio"></div></div>`);
+    var choice = $(`<label class="input-group-text">Rock</label>`);
+    group.append(checkBox,choice);
+    $("#choices").append(group);
 }
 
 function generateGamePanel() {
-    var squareRow = $("<div class='row align-items-center justify-content-center'>");
+    var squareRow = $("<div class='row align-items-center justify-content-center' style='display: inline-block;'>");
     var squareContainer = $("<div class='col-sm-12'>");
-    var textRow = $("<div class='row borderRow'>");
+    
     for (var i = 0; i < 3; i++) {
+        var textRow = $("<div class='borderRow'>");
         var square = $("<div class='choice'>");
-        var text = $(`<h4 class='col-sm-4' style="width: 325px">`);
-        text.text(labels[i]);
-        square.attr("id","box");
-        squareContainer.append(square);
-        textRow.append(text);
+        square.attr("id", "box");
+        textRow.append(`<h4>${labels[i]}</h4>`,square);
+        squareContainer.append(textRow);
     }
     squareRow.append(squareContainer);
-    $("#board").append(textRow,squareRow);
+    $("#board").append(squareRow);
 }

@@ -1,9 +1,18 @@
-.borderRow{
+.borderRow {
     border-style: solid;
     border-width: 2px;
+    display: inline-block;
 }
 
-#box{
+#board {
+    background-color: green;
+}
+
+#choices {
+    background-color: yellowgreen;
+}
+
+#box {
     border-style: solid;
     border-width: 2px;
     width: 325px;
@@ -11,19 +20,23 @@
     margin: 10px;
     display: inline-block;
 }
-.choice{
+
+.choice {
     background-image: url("../images/rps.png");
 }
-.rock{
+
+.rock {
     background-position-x: 317px;
     background-position-y: -129px;
 }
-.paper{
+
+.paper {
     background-position-x: -70px;
     background-position-y: 275px;
     background-size: 600px 600px;
 }
-.scissors{
+
+.scissors {
     background-position-x: -43px;
     background-position-y: -40px;
 }
