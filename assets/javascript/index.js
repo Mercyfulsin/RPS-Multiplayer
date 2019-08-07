@@ -15,12 +15,15 @@ var connectedRef = database.ref(".info/connected");
 var playerNumber = "";
 var labels = ["Your Choice:", "Result:", "Opponent's Choice:"]
 var queue = "";
+var myKey = "";
 // When the client's connection state changes...
 connectedRef.on("value", function (snap) {
     // If they are connected..
     if (snap.val()) {
         // Add user to the connections list.
         var con = connectionsRef.push(true);
+        myKey = con.path.pieces_[1];
+        console.log("Your connection:", myKey);
         // Remove user from the connection list when they disconnect.
         con.onDisconnect().remove();
     }
@@ -28,30 +31,18 @@ connectedRef.on("value", function (snap) {
 
 // When first loaded
 connectionsRef.on("value", function (snap) {
-    tempNum = snap.numChildren();
+    updateQueue(snap);
     // The number of online users is the number of children in the connections list.
-    if ((playerNumber === "" || playerNumber > 2) && (tempNum < queue || queue === "")) {
-        console.log("I'm player ", tempNum);
-        switch (tempNum) {
-            case 1:
-            case 2:
-                playerNumber = tempNum;
-                startGame();
-                break;
-            default:
-                queue = tempNum;
-                rejectGame(tempNum);
-        }
-    } else {
-        switch (queue) {
-            case 1:
-                playerNumber = 2;
-                startGame();
-                break;
-            default:
-                queue--;
-        }
+    console.log("I'm player ", playerNumber);
+    switch (playerNumber) {
+        case 1:
+        case 2:
+            startGame();
+            break;
+        default:
+            rejectGame(queue);
     }
+
 });
 
 $(document).ready({
@@ -59,7 +50,7 @@ $(document).ready({
 
 function rejectGame(queue) {
     document.body.innerHTML = "";
-    $("body").append(`<h1>Unfortunately the lobby already has two people playing the game.<br>You are in queue: ${queue - 2}</h1>`);
+    $("body").append(`<h1>Unfortunately the lobby already has two people playing the game.<br>You are in queue: ${queue}</h1>`);
 }
 
 function startGame() {
@@ -92,4 +83,20 @@ function generateGamePanel() {
     }
     squareRow.append(squareContainer);
     $("#board").append(squareRow);
+}
+
+function updateQueue(obj) {
+    var index = 0;
+    obj.forEach(function (content) {
+        index++;
+        console.log(index, content.key);
+        if (content.key === myKey) {
+            if (index < 3) {
+                queue = 0;
+            } else {
+                queue = index - 2;
+            }
+            playerNumber = index;
+        }
+    });
 }
