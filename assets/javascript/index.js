@@ -1,9 +1,7 @@
-var myConnection;
 var playerNumber = "";
 var labels = ["Your Choice:", "Result:", "Opponent's Choice:"]
 var queue = "";
 var myKey = "";
-var myStuff = "test";
 
 $(document).ready({
 });
