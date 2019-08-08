@@ -1,49 +1,9 @@
-var firebaseConfig = {
-    apiKey: "AIzaSyCaYU9uqpUSiFE20AjqIX4-bNumUzufuuw",
-    authDomain: "fir-intro-27da8.firebaseapp.com",
-    databaseURL: "https://fir-intro-27da8.firebaseio.com",
-    projectId: "fir-intro-27da8",
-    storageBucket: "",
-    messagingSenderId: "232675283864",
-    appId: "1:232675283864:web:f73c23b164121cb2"
-};
-firebase.initializeApp(firebaseConfig);
-
-var database = firebase.database();
-var connectionsRef = database.ref("/connections");
-var connectedRef = database.ref(".info/connected");
+var myConnection;
 var playerNumber = "";
 var labels = ["Your Choice:", "Result:", "Opponent's Choice:"]
 var queue = "";
 var myKey = "";
-// When the client's connection state changes...
-connectedRef.on("value", function (snap) {
-    // If they are connected..
-    if (snap.val()) {
-        // Add user to the connections list.
-        var con = connectionsRef.push(true);
-        myKey = con.path.pieces_[1];
-        console.log("Your connection:", myKey);
-        // Remove user from the connection list when they disconnect.
-        con.onDisconnect().remove();
-    }
-});
-
-// When first loaded
-connectionsRef.on("value", function (snap) {
-    updateQueue(snap);
-    // The number of online users is the number of children in the connections list.
-    console.log("I'm player ", playerNumber);
-    switch (playerNumber) {
-        case 1:
-        case 2:
-            startGame();
-            break;
-        default:
-            rejectGame(queue);
-    }
-
-});
+var myStuff = "test";
 
 $(document).ready({
 });
@@ -63,10 +23,22 @@ function startGame() {
 }
 
 function generateChoices() {
-    var group = $(`<div class="input-group">`);
-    var checkBox = $(`<div class="input-group-prepend"><div class="input-group-text"><input type="radio"></div></div>`);
-    var choice = $(`<label class="input-group-text">Rock</label>`);
-    group.append(checkBox, choice);
+    let btnTypeArr = ["Rock","Paper","Scissors"];
+    var group = $(`<div class="btn-group">`);
+    var mainBtn = $(`<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose!</button>`);
+    var menuContainer = $(`<div class="dropdown-menu">`);
+    for(var i = 0; i < btnTypeArr.length; i++){
+        var btn = $(`<button class="dropdown-item" id="pick" type="button">${btnTypeArr[i]}</button>`);
+        btn.addClass(btnTypeArr[i].toLowerCase());
+        btn.click(function(){
+            myConnection.push($(this).text());
+            var myChoice = $("#box")[0];
+            $(myChoice).attr("style","background-image: url('assets/images/rps.png');");
+            $(myChoice).addClass($(this).text().toLowerCase());
+        })
+        menuContainer.append(btn);
+    }
+    group.append(mainBtn,menuContainer);
     $("#choices").append(group);
 }
 
@@ -76,7 +48,7 @@ function generateGamePanel() {
 
     for (var i = 0; i < 3; i++) {
         var textRow = $("<div class='borderRow'>");
-        var square = $("<div class='choice'>");
+        var square = $("<div>");
         square.attr("id", "box");
         textRow.append(`<h4>${labels[i]}</h4>`, square);
         squareContainer.append(textRow);

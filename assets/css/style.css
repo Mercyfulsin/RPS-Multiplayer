@@ -21,10 +21,6 @@
     display: inline-block;
 }
 
-.choice {
-    background-image: url("../images/rps.png");
-}
-
 .rock {
     background-position-x: 317px;
     background-position-y: -129px;
