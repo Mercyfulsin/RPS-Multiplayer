@@ -24,6 +24,7 @@
 .rock {
     background-position-x: 317px;
     background-position-y: -129px;
+    background-size: 840px 725px;
 }
 
 .paper {
@@ -35,4 +36,5 @@
 .scissors {
     background-position-x: -43px;
     background-position-y: -40px;
+    background-size: 840px 725px;
 }
