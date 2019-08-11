@@ -12,7 +12,7 @@
     background-color: yellowgreen;
 }
 
-#box {
+.box {
     border-style: solid;
     border-width: 2px;
     width: 325px;
@@ -37,4 +37,19 @@
     background-position-x: -43px;
     background-position-y: -40px;
     background-size: 840px 725px;
+}
+
+.win {
+    background-position-x: -61px;
+    background-size: 442px 619px;
+}
+.lose{
+    background-position-x: -38px;
+    background-size: 399px 744px;
+    background-position-y: -261px;
+}
+.tie{
+    background-position-x: -90px;
+    background-size: 520px 744px;
+    background-position-y: -466px;
 }

@@ -30,10 +30,10 @@ function generateChoices() {
         btn.addClass(btnTypeArr[i].toLowerCase());
         btn.click(function () {
             myConnection.push($(this).text());
-            var myChoice = $("#box")[0];
+            var myChoice = $("#box0");
             $(myChoice).attr("style", "background-image: url('assets/images/rps.png');");
             $(myChoice).addClass($(this).text().toLowerCase());
-            $(this).parent().remove();
+            $(this).parent().parent().remove();
         })
         menuContainer.append(btn);
     }
@@ -48,7 +48,8 @@ function generateGamePanel() {
     for (var i = 0; i < 3; i++) {
         var textRow = $("<div class='borderRow'>");
         var square = $("<div>");
-        square.attr("id", "box");
+        square.attr("id", `box${i}`);
+        square.addClass("box");
         textRow.append(`<h4>${labels[i]}</h4>`, square);
         squareContainer.append(textRow);
     }
@@ -75,4 +76,41 @@ function updateQueue(obj) {
             playerNumber = index;
         }
     });
+}
+
+function checkWinner() {
+    if (!userChoices.includes("")) {
+        if (userChoices[0] === "Paper" && userChoices[1] === "Rock" || userChoices[0] === "Rock" && userChoices[1] === "Scissors" || userChoices[0] === "Scissors" && userChoices[1] === "Paper") {
+            result("win");
+        } else if (userChoices[0] === userChoices[1]) {
+            result("tie");
+        } else {
+            result("loss");
+        }
+    }
+}
+
+function result(string) {
+    var myChoice = $("#box2");
+    $(myChoice).attr("style", "background-image: url('assets/images/rps.png');");
+    $(myChoice).addClass(userChoices[1].toLowerCase());
+    var myChoice = $("#box1");
+    $(myChoice).attr("style", "background-image: url('assets/images/status.png');");
+
+    switch (string) {
+        case "win":
+            console.log("Win");
+            $("#box1").addClass("win");
+            break;
+        case "tie":
+            console.log("tie");
+            $("#box1").addClass("tie");
+            break;
+        case "loss":
+            console.log("loss");
+            $("#box1").addClass("lose");
+            break;
+        default:
+            console.log("Cheater!");
+    }
 }

@@ -17,6 +17,7 @@ var loaded = false;
 var inGame = false;
 var userChoices = ["", ""];
 var playerKeys = ["", ""];
+
 // When the client's connection state changes...
 connectedRef.on("value", function (snap) {
     // If they are connected..
@@ -66,6 +67,7 @@ myConnection.on("value", function (snapshot) {
             playerKeys[i] === myKey ? userChoices[0] = subject[key] : userChoices[1] = subject[key];
         });
     }
+    checkWinner();
 });
 
 function grabPlayers(obj) {
