@@ -14,6 +14,8 @@ var connectionsRef = database.ref("/connections");
 var connectedRef = database.ref(".info/connected");
 var myConnection = database.ref("/connections/");
 var loaded = false;
+var userChoices = ["", ""];
+var playerKeys = ["", ""];
 // When the client's connection state changes...
 connectedRef.on("value", function (snap) {
     // If they are connected..
@@ -21,9 +23,11 @@ connectedRef.on("value", function (snap) {
         // Add user to the connections list.
         var con = connectionsRef.push(true);
         myKey = con.path.pieces_[1];
+        console.log(`/connections/${myKey}`);
         myConnection = database.ref(`/connections/${myKey}`);
+
         console.log("Your connection:", myKey);
-        console.log(myConnection,connectionsRef)
+        console.log(myConnection, connectionsRef)
         // Remove user from the connection list when they disconnect.
         con.onDisconnect().remove();
     }
@@ -32,7 +36,7 @@ connectedRef.on("value", function (snap) {
 // When first loaded
 connectionsRef.on("value", function (snap) {
     // The number of online users is the number of children in the connections list.
-    if(loaded){
+    if (loaded) {
         updateQueue(snap);
     }
     if (queue === "" || queue > 0) {
@@ -50,10 +54,25 @@ connectionsRef.on("value", function (snap) {
     }
 });
 
-myConnection.on("value",function(snap){
-    console.log("Val111",snap.val());
-    console.log("Snap",snap);
-    Object.keys(snap.val()[myKey]).forEach(function(key){
-        console.log(snap.val()[myKey][key]);
-    });
+myConnection.on("value", function (snapshot) {
+    // console.log("Val111",snapshot.val());
+    // console.log("Snap",snapshot);
+    grabPlayers(snapshot);
+    for (var i = 0; i < 2; i++) {
+        var subject = snapshot.val()[playerKeys[i]];
+        Object.keys(subject).forEach(function (key) {
+            console.log(subject[key]);
+            playerKeys[i] === myKey ? userChoices[0] = subject[key] : userChoices[1] = subject[key];
+        });
+    }
 });
+
+function grabPlayers(obj) {
+    console.log("Grabbing all players");
+    var index = 0;
+    obj.forEach(function (content) {
+        playerKeys[index] = content.key;
+        index++;
+    });
+    console.log(playerKeys.toLocaleString());
+}

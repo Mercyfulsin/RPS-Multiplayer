@@ -62,7 +62,7 @@ function updateQueue(obj) {
         console.log(index, content.key);
         if (content.key === myKey) {
             if (index < 3) {
-                queue = 0;
+                queue = "";
             } else {
                 queue = index - 2;
             }
