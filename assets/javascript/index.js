@@ -21,22 +21,23 @@ function startGame() {
 }
 
 function generateChoices() {
-    let btnTypeArr = ["Rock","Paper","Scissors"];
+    let btnTypeArr = ["Rock", "Paper", "Scissors"];
     var group = $(`<div class="btn-group">`);
     var mainBtn = $(`<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose!</button>`);
     var menuContainer = $(`<div class="dropdown-menu">`);
-    for(var i = 0; i < btnTypeArr.length; i++){
+    for (var i = 0; i < btnTypeArr.length; i++) {
         var btn = $(`<button class="dropdown-item" id="pick" type="button">${btnTypeArr[i]}</button>`);
         btn.addClass(btnTypeArr[i].toLowerCase());
-        btn.click(function(){
+        btn.click(function () {
             myConnection.push($(this).text());
             var myChoice = $("#box")[0];
-            $(myChoice).attr("style","background-image: url('assets/images/rps.png');");
+            $(myChoice).attr("style", "background-image: url('assets/images/rps.png');");
             $(myChoice).addClass($(this).text().toLowerCase());
+            $(this).parent().remove();
         })
         menuContainer.append(btn);
     }
-    group.append(mainBtn,menuContainer);
+    group.append(mainBtn, menuContainer);
     $("#choices").append(group);
 }
 
@@ -61,8 +62,13 @@ function updateQueue(obj) {
         index++;
         console.log(index, content.key);
         if (content.key === myKey) {
-            if (index < 3) {
+            if (index < 3 && inGame === false) {
                 queue = "";
+                inGame = true;
+            }
+            else if (index < 3) {
+                queue = 0;
+
             } else {
                 queue = index - 2;
             }

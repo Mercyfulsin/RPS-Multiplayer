@@ -14,6 +14,7 @@ var connectionsRef = database.ref("/connections");
 var connectedRef = database.ref(".info/connected");
 var myConnection = database.ref("/connections/");
 var loaded = false;
+var inGame = false;
 var userChoices = ["", ""];
 var playerKeys = ["", ""];
 // When the client's connection state changes...
